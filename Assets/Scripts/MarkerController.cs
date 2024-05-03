@@ -45,6 +45,6 @@ public class MarkerController : MonoBehaviour
         _intensivity *= _burnRatePerSec;
         Color oldColor = _spriteRenderer.color;
         _spriteRenderer.color = new Color(oldColor.r, oldColor.g, oldColor.b, _intensivity);
-        Debug.Log(_spriteRenderer.color.a);
+        //Debug.Log(_spriteRenderer.color.a);
     }
 }

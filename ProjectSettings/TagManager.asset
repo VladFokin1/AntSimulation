@@ -8,6 +8,11 @@ TagManager:
   - Home
   - Food
   - Borders
+  - CollisionDetector
+  - MarkerDetector
+  - ObjDetector
+  - ToHome
+  - ToFood
   layers:
   - Default
   - TransparentFX
