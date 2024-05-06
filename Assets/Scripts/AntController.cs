@@ -56,19 +56,19 @@ public class AntController : MonoBehaviour
         //going to home or food
         if (_goToTargetPos)
         {
-            Vector3.Lerp(transform.up, (_targetPos - transform.position).normalized, 0.25f);
+            transform.up = Vector3.Lerp(transform.up, (_targetPos - transform.position).normalized, 0.25f);
         }
         //search for home
         else if (_isBusy)
         {
             if (_mostIntensiveToHome != null)
-                Vector3.Lerp(transform.up, (_mostIntensiveToHome.transform.position - transform.position).normalized, 0.25f);
+                transform.up = Vector3.Lerp(transform.up, (_mostIntensiveToHome.transform.position - transform.position).normalized, 0.25f);
         }
         //search for food
         else if (!_isBusy)
         {
             if (_mostIntensiveToFood != null)
-                Vector3.Lerp(transform.up, (_mostIntensiveToFood.transform.position - transform.position).normalized, 0.25f);
+                transform.up = Vector3.Lerp(transform.up, (_mostIntensiveToFood.transform.position - transform.position).normalized, 0.25f);
         }
 
         if (Random.Range(0, 100) > 90) 
@@ -112,6 +112,7 @@ public class AntController : MonoBehaviour
     {
         if (!_isBusy)
         {
+
             _targetPos = other.transform.position;
             _goToTargetPos = true;
         }
@@ -123,8 +124,6 @@ public class AntController : MonoBehaviour
     {
         if (!_isBusy)
         {
-            transform.Rotate(transform.forward, 180f);
-
             _goToTargetPos = false;
             _isBusy = true;
             _markersIntensivity = 1f;
@@ -134,6 +133,8 @@ public class AntController : MonoBehaviour
 
             Destroy(other.gameObject);
         }
+
+        transform.Rotate(transform.forward, 180f);
     }
 
 
@@ -151,8 +152,6 @@ public class AntController : MonoBehaviour
     {
         if (_isBusy)
         {
-            transform.Rotate(transform.forward, Random.Range(150f, 210f));
-
             _goToTargetPos = false;
             _isBusy = false;
             _markersIntensivity = 1f;
@@ -160,6 +159,7 @@ public class AntController : MonoBehaviour
             _mostIntensiveToFood = null;
             _toFoodList.Clear();
         }
+        transform.Rotate(transform.forward, Random.Range(150f, 210f));
     }
 
 
