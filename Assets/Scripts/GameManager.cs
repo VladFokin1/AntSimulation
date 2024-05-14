@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -15,6 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _homeObj;
     [SerializeField] GameObject _foodPrefab;
 
+
+    private bool _isRunning = false;
+    private ObjectPool pool;
+
     private int _currentNumOfAnts;
 
     private void Awake()
@@ -22,10 +24,12 @@ public class GameManager : MonoBehaviour
         
         _antsInputField.onValueChanged.AddListener(delegate { OnInputFieldValueChanged(); });
         _antsSlider.onValueChanged.AddListener(delegate { OnSliderValueChanged(); });
-        _startButton.onClick.AddListener(delegate { OnStartButtonClick(); });
+        _startButton.onClick.AddListener(delegate { OnButtonClick(); });
 
         _antsSlider.value = _antsNumOnStart;
         _antsInputField.text = _antsNumOnStart.ToString();
+        pool = new ObjectPool(_antPrefab, _antsNumOnStart);
+
     }
 
 
@@ -33,7 +37,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsMouseOverUI())
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsMouseOverUI() && !_isRunning)
             OnMouseClick();
     }
 
@@ -49,12 +53,26 @@ public class GameManager : MonoBehaviour
         _currentNumOfAnts = Int32.Parse(_antsInputField.text);
     }
 
-    private void OnStartButtonClick()
+    private void OnButtonClick()
     {
-        float angleBetweenAnts = 360f / _currentNumOfAnts;
-        Debug.Log(angleBetweenAnts);
-        for (int i = 0; i < _currentNumOfAnts; i++)
-            Instantiate(_antPrefab, _homeObj.transform.position, Quaternion.identity);
+        if (!_isRunning)
+        {
+            _startButton.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Stop";
+            for (int i = 0; i < _currentNumOfAnts; i++)
+            {
+                GameObject ant = pool.Get();
+                ant.transform.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(0, 360));
+            }
+                
+            _isRunning = true;
+        }
+        else
+        {
+            _startButton.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = "Start";
+            pool.ReleaseAll();
+            _isRunning = false;
+        }
+        
     }
 
     private void OnMouseClick()

@@ -71,8 +71,8 @@ public class AntController : MonoBehaviour
                 transform.up = Vector3.Lerp(transform.up, (_mostIntensiveToFood.transform.position - transform.position).normalized, 0.25f);
         }
 
-        /*if (Random.Range(0, 100) > 90) 
-            transform.Rotate(transform.forward, Random.Range(-10f, 10f));*/
+        if (Random.Range(0, 100) > 90) 
+            transform.Rotate(transform.forward, Random.Range(-10f, 10f));
     }
 
     private void FixedUpdate()
